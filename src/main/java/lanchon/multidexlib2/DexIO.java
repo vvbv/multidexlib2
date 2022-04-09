@@ -144,8 +144,8 @@ public class DexIO {
 				if (nameIterator.getCount() != output.size()) {
 					throw new IllegalStateException("Name iterator and output list misaligned");
 				}
-				nameIterator.next();
 				outIndex = nameIterator.getCount();
+				nameIterator.next();
 
 				if (classIterator instanceof BatchedIterator) {
 					((BatchedIterator<?>) classIterator).preloadBatch();
