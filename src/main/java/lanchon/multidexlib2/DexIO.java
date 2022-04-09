@@ -153,7 +153,7 @@ public class DexIO {
 			}
 			MemoryDataStore memoryDataStore = new MemoryDataStore();
 			dexPool.writeTo(memoryDataStore);
-			output.set(outIndex, memoryDataStore); // prevent list desync
+			output.add(outIndex, memoryDataStore); // prevent list desync
 			minMainDexClassCount = 0;
 			minimalMainDex = false;
 		} while (classIterator.hasNext());

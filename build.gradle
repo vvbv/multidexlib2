@@ -15,9 +15,9 @@ plugins {
 }
 
 def dexlib2Version = '2.4.0'
-def multidexlib2VersionSuffix = ''
+def multidexlib2VersionSuffix = '.r2'
 
-group = 'com.github.lanchon.dexpatcher'
+group = 'app.revanced'
 version = dexlib2Version + multidexlib2VersionSuffix
 
 ext.mainArtifact = 'multidexlib2'
@@ -43,7 +43,7 @@ apply from: 'configure-publishing.gradle'
 
 publishing {
     publications {
-        multidexlib2(MavenPublication) {
+        gpr(MavenPublication) {
             artifactId = mainArtifact
             from components.java
             pom {
