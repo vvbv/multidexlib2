@@ -17,6 +17,7 @@ import java.lang.reflect.UndeclaredThrowableException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
@@ -64,7 +65,7 @@ public class DexIO {
 		dexPool.writeTo(dataStore);
 	}
 
-	static void writeMultiDexDirectorySingleThread(List<MemoryDataStore> output, DexFileNameIterator nameIterator,
+	static void writeMultiDexDirectorySingleThread(Map<String, MemoryDataStore> output, DexFileNameIterator nameIterator,
 			DexFile dexFile, int minMainDexClassCount, boolean minimalMainDex, int maxDexPoolSize)
 			throws IOException {
 		Set<? extends ClassDef> classes = dexFile.getClasses();
@@ -78,7 +79,7 @@ public class DexIO {
 
 	// Multi-Threaded Write
 
-	static void writeMultiDexDirectoryMultiThread(int threadCount, final List<MemoryDataStore> output,
+	static void writeMultiDexDirectoryMultiThread(int threadCount, final Map<String, MemoryDataStore> output,
 			final DexFileNameIterator nameIterator, final DexFile dexFile, final int maxDexPoolSize) throws IOException {
 		Iterator<? extends ClassDef> classIterator = dexFile.getClasses().iterator();
 		final Object lock = new Object();
@@ -116,7 +117,7 @@ public class DexIO {
 		}
 	}
 
-	private static void writeMultiDexDirectoryCommon(List<MemoryDataStore> output, DexFileNameIterator nameIterator,
+	private static void writeMultiDexDirectoryCommon(Map<String, MemoryDataStore> output, DexFileNameIterator nameIterator,
 			PeekingIterator<? extends ClassDef> classIterator, int minMainDexClassCount, boolean minimalMainDex,
 			Opcodes opcodes, int maxDexPoolSize, Object lock) throws IOException {
 		do {
@@ -135,22 +136,17 @@ public class DexIO {
 				classIterator.next();
 				fileClassCount++;
 			}
-			int outIndex;
+			String dexName;
 			//noinspection SynchronizationOnLocalVariableOrMethodParameter
 			synchronized (lock) {
-				if (nameIterator.getCount() != output.size()) {
-					throw new IllegalStateException("Name iterator and output list misaligned");
-				}
-				outIndex = nameIterator.getCount();
-				nameIterator.next();
-
+				dexName = nameIterator.next();
 				if (classIterator instanceof BatchedIterator) {
 					((BatchedIterator<?>) classIterator).preloadBatch();
 				}
 			}
 			MemoryDataStore memoryDataStore = new MemoryDataStore();
 			dexPool.writeTo(memoryDataStore);
-			output.add(outIndex, memoryDataStore); // prevent list desync
+			output.put(dexName, memoryDataStore);
 			minMainDexClassCount = 0;
 			minimalMainDex = false;
 		} while (classIterator.hasNext());

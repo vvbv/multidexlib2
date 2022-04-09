@@ -14,6 +14,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 
 import org.jf.dexlib2.Opcodes;
 import org.jf.dexlib2.dexbacked.DexBackedDexFile;
@@ -67,24 +68,24 @@ public class MultiDexIO {
 
 	// Write
 
-	public static int writeDexFile(boolean multiDex, List<MemoryDataStore> output, DexFileNamer namer, DexFile dexFile,
+	public static int writeDexFile(boolean multiDex, Map<String, MemoryDataStore> output, DexFileNamer namer, DexFile dexFile,
 			int maxDexPoolSize, DexIO.Logger logger) throws IOException {
 		return writeDexFile(multiDex, 1, output, namer, dexFile, maxDexPoolSize, logger);
 	}
 
-	public static int writeDexFile(boolean multiDex, int threadCount, List<MemoryDataStore> output, DexFileNamer namer, DexFile dexFile,
+	public static int writeDexFile(boolean multiDex, int threadCount, Map<String, MemoryDataStore> output, DexFileNamer namer, DexFile dexFile,
 			int maxDexPoolSize, DexIO.Logger logger) throws IOException {
 		return writeDexFile(multiDex, threadCount, output, namer, dexFile, 0, false, maxDexPoolSize);
 	}
 
-	public static int writeDexFile(boolean multiDex, List<MemoryDataStore> output, DexFileNamer namer, DexFile dexFile,
+	public static int writeDexFile(boolean multiDex, Map<String, MemoryDataStore> output, DexFileNamer namer, DexFile dexFile,
 			int minMainDexClassCount, boolean minimalMainDex, int maxDexPoolSize,
 			DexIO.Logger logger) throws IOException {
 		return writeDexFile(multiDex, 1, output, namer, dexFile, minMainDexClassCount, minimalMainDex, maxDexPoolSize
 		);
 	}
 
-	public static int writeDexFile(boolean multiDex, int threadCount, List<MemoryDataStore> output, DexFileNamer namer, DexFile dexFile,
+	public static int writeDexFile(boolean multiDex, int threadCount, Map<String, MemoryDataStore> output, DexFileNamer namer, DexFile dexFile,
 			int minMainDexClassCount, boolean minimalMainDex, int maxDexPoolSize) throws IOException {
 		if (!multiDex) throw new UnsupportedOperationException(
 				"Non-multidex is no longer supported, please use the official multidexlib2 for that."
@@ -93,7 +94,7 @@ public class MultiDexIO {
 				minimalMainDex, maxDexPoolSize);
 	}
 
-	public static int writeMultiDexDirectory(int threadCount, List<MemoryDataStore> output, DexFileNamer namer,
+	public static int writeMultiDexDirectory(int threadCount, Map<String, MemoryDataStore> output, DexFileNamer namer,
 			DexFile dexFile, int minMainDexClassCount, boolean minimalMainDex, int maxDexPoolSize)
 			throws IOException {
 		DexFileNameIterator nameIterator = new DexFileNameIterator(namer);
