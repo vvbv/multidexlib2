@@ -25,7 +25,8 @@ public class MultiDexIO {
 
 	public static final int DEFAULT_MAX_THREADS = 4;
 
-	private MultiDexIO() {}
+	private MultiDexIO() {
+	}
 
 	// Read
 

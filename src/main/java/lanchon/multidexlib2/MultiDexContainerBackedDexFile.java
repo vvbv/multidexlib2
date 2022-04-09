@@ -15,7 +15,6 @@ import java.util.Collections;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
-
 import javax.annotation.Nonnull;
 
 import org.jf.dexlib2.Opcodes;

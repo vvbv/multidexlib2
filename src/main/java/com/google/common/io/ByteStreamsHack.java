@@ -17,6 +17,9 @@ import java.io.InputStream;
 
 public class ByteStreamsHack {
 
+	private ByteStreamsHack() {
+	}
+
 	public static byte[] toByteArray(InputStream inputStream, long expectedSize) throws IOException {
 
 		// WARNING: This implementation relies on non-public API of Guava.
@@ -30,7 +33,5 @@ public class ByteStreamsHack {
 				ByteStreams.toByteArray(inputStream, expectedSize);
 
 	}
-
-	private ByteStreamsHack() {}
 
 }

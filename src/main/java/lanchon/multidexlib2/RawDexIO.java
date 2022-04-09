@@ -25,7 +25,8 @@ import org.jf.dexlib2.writer.io.FileDataStore;
 
 public class RawDexIO {
 
-	private RawDexIO() {}
+	private RawDexIO() {
+	}
 
 	// Read
 

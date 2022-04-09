@@ -15,6 +15,9 @@ import org.jf.dexlib2.VersionMap;
 
 public class OpcodeUtils {
 
+	private OpcodeUtils() {
+	}
+
 	public static Opcodes getOpcodesFromDexVersion(int dexVersion) {
 		//return Opcodes.forApi(DexVersionMap.getHighestApiLevelFromDexVersion(dexVersion));
 		//return Opcodes.forApi(VersionMap.mapDexVersionToApi(dexVersion));
@@ -28,15 +31,6 @@ public class OpcodeUtils {
 		return VersionMap.mapApiToDexVersion(opcodes.api);
 	}
 
-	public static Opcodes getNewestOpcodes(Opcodes o1, Opcodes o2, boolean nullable) {
-		if (nullable) {
-			if (o1 == null) return o2;
-			if (o2 == null) return o1;
-		}
-		if (o1.api == VersionMap.NO_VERSION || o2.api == VersionMap.NO_VERSION) throw undefinedApiLevel();
-		return o1.api >= o2.api ? o1 : o2;
-	}
-
 	/*
 	public static <T extends DexFile> Opcodes getNewestOpcodes(MultiDexContainer<T> container) throws IOException {
 		Opcodes opcodes = null;
@@ -47,10 +41,17 @@ public class OpcodeUtils {
 	}
 	*/
 
+	public static Opcodes getNewestOpcodes(Opcodes o1, Opcodes o2, boolean nullable) {
+		if (nullable) {
+			if (o1 == null) return o2;
+			if (o2 == null) return o1;
+		}
+		if (o1.api == VersionMap.NO_VERSION || o2.api == VersionMap.NO_VERSION) throw undefinedApiLevel();
+		return o1.api >= o2.api ? o1 : o2;
+	}
+
 	private static IllegalArgumentException undefinedApiLevel() {
 		return new IllegalArgumentException("Opcodes instance has undefined api level");
 	}
-
-	private OpcodeUtils() {}
 
 }

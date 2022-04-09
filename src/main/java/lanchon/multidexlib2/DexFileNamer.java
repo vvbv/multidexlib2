@@ -13,6 +13,7 @@ package lanchon.multidexlib2;
 public interface DexFileNamer {
 
 	String getName(int index);
+
 	int getIndex(String name);
 
 	boolean isValidName(String name);

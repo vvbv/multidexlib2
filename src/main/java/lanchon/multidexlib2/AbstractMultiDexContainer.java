@@ -14,7 +14,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
-
 import javax.annotation.Nonnull;
 
 import org.jf.dexlib2.iface.DexFile;
@@ -25,7 +24,8 @@ public abstract class AbstractMultiDexContainer<T extends DexFile> implements Mu
 	private Map<String, DexEntry<T>> entryMap;
 	private List<String> entryNames;
 
-	protected AbstractMultiDexContainer() {}
+	protected AbstractMultiDexContainer() {
+	}
 
 	protected void initialize(Map<String, DexEntry<T>> entryMap) {
 		if (entryMap == null) throw new NullPointerException("entryMap");

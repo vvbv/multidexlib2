@@ -24,17 +24,6 @@ import org.jf.dexlib2.dexbacked.DexBackedDexFile;
 
 public class ZipFileDexContainer extends AbstractMultiDexContainer<DexBackedDexFile> {
 
-	public static boolean isZipFile(File zip) {
-		if (!zip.isFile()) return false;
-		try {
-			ZipFile zipFile = new ZipFile(zip);
-			zipFile.close();
-			return true;
-		} catch (IOException e) {
-			return false;
-		}
-	}
-
 	public ZipFileDexContainer(File zip, DexFileNamer namer, Opcodes opcodes) throws IOException {
 		Map<String, DexEntry<DexBackedDexFile>> entryMap = new TreeMap<>(new DexFileNameComparator(namer));
 		try (ZipFile zipFile = new ZipFile(zip)) {
@@ -53,6 +42,17 @@ public class ZipFileDexContainer extends AbstractMultiDexContainer<DexBackedDexF
 			}
 		}
 		initialize(entryMap);
+	}
+
+	public static boolean isZipFile(File zip) {
+		if (!zip.isFile()) return false;
+		try {
+			ZipFile zipFile = new ZipFile(zip);
+			zipFile.close();
+			return true;
+		} catch (IOException e) {
+			return false;
+		}
 	}
 
 }

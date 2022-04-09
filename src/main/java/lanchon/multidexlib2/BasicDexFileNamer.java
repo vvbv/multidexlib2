@@ -46,8 +46,11 @@ public class BasicDexFileNamer implements DexFileNamer {
 		String s = name.substring(prefix.length(), name.length() - suffix.length());
 		if (s.isEmpty()) return 0;
 		int i;
-		try { i = Integer.parseInt(s); }
-		catch (NumberFormatException e) { return -1; }
+		try {
+			i = Integer.parseInt(s);
+		} catch (NumberFormatException e) {
+			return -1;
+		}
 		if (i < 2 || !s.equals(String.valueOf(i))) return -1;
 		return i - 1;
 	}

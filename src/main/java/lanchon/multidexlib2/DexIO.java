@@ -37,12 +37,10 @@ import org.jf.dexlib2.writer.pool.DexPool;
 public class DexIO {
 
 	public static final int DEFAULT_MAX_DEX_POOL_SIZE = DexWriter.MAX_POOL_SIZE;
+	private static final int PER_THREAD_BATCH_SIZE = 100;
 
-	public interface Logger {
-		void log(File file, String entryName, int typeCount);
+	private DexIO() {
 	}
-
-	private DexIO() {}
 
 	// Single-Threaded Write
 
@@ -78,8 +76,6 @@ public class DexIO {
 	}
 
 	// Multi-Threaded Write
-
-	private static final int PER_THREAD_BATCH_SIZE = 100;
 
 	static void writeMultiDexDirectoryMultiThread(int threadCount, final List<MemoryDataStore> output,
 			final DexFileNameIterator nameIterator, final DexFile dexFile, final int maxDexPoolSize,
@@ -123,8 +119,6 @@ public class DexIO {
 		}
 	}
 
-	// Common Code
-
 	private static void writeMultiDexDirectoryCommon(List<MemoryDataStore> output, DexFileNameIterator nameIterator,
 			PeekingIterator<? extends ClassDef> classIterator, int minMainDexClassCount, boolean minimalMainDex,
 			Opcodes opcodes, int maxDexPoolSize, DexIO.Logger logger, Object lock) throws IOException {
@@ -165,11 +159,17 @@ public class DexIO {
 		} while (classIterator.hasNext());
 	}
 
+	// Common Code
+
 	private static void handleDexPoolOverflow(ClassDef classDef, int classCount, int minClassCount) {
 		if (classCount < minClassCount) throw new DexPoolOverflowException(
 				"Dex pool overflowed while writing type " + (classCount + 1) + " of " + minClassCount);
 		if (classCount == 0) throw new DexPoolOverflowException(
 				"Type too big for dex pool: " + classDef.getType());
+	}
+
+	public interface Logger {
+		void log(File file, String entryName, int typeCount);
 	}
 
 }
