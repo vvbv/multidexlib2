@@ -36,6 +36,7 @@ import org.jf.dexlib2.writer.pool.DexPool;
 
 public class DexIO {
 
+	@SuppressWarnings("unused")
 	public static final int DEFAULT_MAX_DEX_POOL_SIZE = DexWriter.MAX_POOL_SIZE;
 	private static final int PER_THREAD_BATCH_SIZE = 100;
 
@@ -64,22 +65,21 @@ public class DexIO {
 	}
 
 	static void writeMultiDexDirectorySingleThread(List<MemoryDataStore> output, DexFileNameIterator nameIterator,
-			DexFile dexFile, int minMainDexClassCount, boolean minimalMainDex, int maxDexPoolSize, DexIO.Logger logger)
+			DexFile dexFile, int minMainDexClassCount, boolean minimalMainDex, int maxDexPoolSize)
 			throws IOException {
 		Set<? extends ClassDef> classes = dexFile.getClasses();
 		Object lock = new Object();
 		//noinspection SynchronizationOnLocalVariableOrMethodParameter
 		synchronized (lock) {       // avoid multiple synchronizations in single-threaded mode
 			writeMultiDexDirectoryCommon(output, nameIterator, Iterators.peekingIterator(classes.iterator()),
-					minMainDexClassCount, minimalMainDex, dexFile.getOpcodes(), maxDexPoolSize, logger, lock);
+					minMainDexClassCount, minimalMainDex, dexFile.getOpcodes(), maxDexPoolSize, lock);
 		}
 	}
 
 	// Multi-Threaded Write
 
 	static void writeMultiDexDirectoryMultiThread(int threadCount, final List<MemoryDataStore> output,
-			final DexFileNameIterator nameIterator, final DexFile dexFile, final int maxDexPoolSize,
-			final DexIO.Logger logger) throws IOException {
+			final DexFileNameIterator nameIterator, final DexFile dexFile, final int maxDexPoolSize) throws IOException {
 		Iterator<? extends ClassDef> classIterator = dexFile.getClasses().iterator();
 		final Object lock = new Object();
 		List<Callable<Void>> callables = new ArrayList<>(threadCount);
@@ -87,13 +87,10 @@ public class DexIO {
 			final BatchedIterator<ClassDef> batchedIterator =
 					new BatchedIterator<>(classIterator, lock, PER_THREAD_BATCH_SIZE);
 			if (i != 0 && !batchedIterator.hasNext()) break;
-			callables.add(new Callable<Void>() {
-				@Override
-				public Void call() throws IOException {
-					writeMultiDexDirectoryCommon(output, nameIterator, batchedIterator, 0, false,
-							dexFile.getOpcodes(), maxDexPoolSize, logger, lock);
-					return null;
-				}
+			callables.add(() -> {
+				writeMultiDexDirectoryCommon(output, nameIterator, batchedIterator, 0, false,
+						dexFile.getOpcodes(), maxDexPoolSize, lock);
+				return null;
 			});
 		}
 		ExecutorService service = Executors.newFixedThreadPool(threadCount);
@@ -121,7 +118,7 @@ public class DexIO {
 
 	private static void writeMultiDexDirectoryCommon(List<MemoryDataStore> output, DexFileNameIterator nameIterator,
 			PeekingIterator<? extends ClassDef> classIterator, int minMainDexClassCount, boolean minimalMainDex,
-			Opcodes opcodes, int maxDexPoolSize, DexIO.Logger logger, Object lock) throws IOException {
+			Opcodes opcodes, int maxDexPoolSize, Object lock) throws IOException {
 		do {
 			DexPool dexPool = new DexPool(opcodes);
 			int fileClassCount = 0;

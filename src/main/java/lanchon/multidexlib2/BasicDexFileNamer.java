@@ -14,6 +14,7 @@ public class BasicDexFileNamer implements DexFileNamer {
 
 	public static final String DEFAULT_PREFIX = "classes";
 	public static final String DEFAULT_SUFFIX = ".dex";
+	@SuppressWarnings("unused")
 	public static final String DEFAULT_BASE_NAME = DEFAULT_PREFIX + DEFAULT_SUFFIX;
 
 	private final String prefix;

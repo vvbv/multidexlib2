@@ -39,20 +39,11 @@ public class RawDexIO {
 	}
 
 	public static DexBackedDexFile readRawDexFile(File file, Opcodes opcodes) throws IOException {
-		/*
-		try (InputStream inputStream = new FileInputStream(file)) {
-			return readRawDexFile(inputStream, file.length(), opcodes);
-		}
-		*/
-		//noinspection UnstableApiUsage
 		byte[] buf = Files.toByteArray(file);
 		return readRawDexFile(buf, 0, opcodes);
 	}
 
-	public static DexBackedDexFile readRawDexFile(InputStream inputStream, long expectedSize, Opcodes opcodes)
-			throws IOException {
-		// TODO: Remove hack when issue is fixed: https://github.com/google/guava/issues/2616
-		//byte[] buf = ByteStreams.toByteArray(inputStream);
+	public static DexBackedDexFile readRawDexFile(InputStream inputStream, long expectedSize, Opcodes opcodes) throws IOException {
 		byte[] buf = ByteStreamsHack.toByteArray(inputStream, expectedSize);
 		return readRawDexFile(buf, 0, opcodes);
 	}

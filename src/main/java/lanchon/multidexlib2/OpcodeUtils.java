@@ -19,27 +19,13 @@ public class OpcodeUtils {
 	}
 
 	public static Opcodes getOpcodesFromDexVersion(int dexVersion) {
-		//return Opcodes.forApi(DexVersionMap.getHighestApiLevelFromDexVersion(dexVersion));
-		//return Opcodes.forApi(VersionMap.mapDexVersionToApi(dexVersion));
 		return Opcodes.forDexVersion(dexVersion);
 	}
 
 	public static int getDexVersionFromOpcodes(Opcodes opcodes) {
 		if (opcodes.api == VersionMap.NO_VERSION) throw undefinedApiLevel();
-		//return DexVersionMap.getDexVersionFromApiLevel(opcodes.api);
-		//return HeaderItem.getVersion(HeaderItem.getMagicForApi(opcodes.api), 0);
 		return VersionMap.mapApiToDexVersion(opcodes.api);
 	}
-
-	/*
-	public static <T extends DexFile> Opcodes getNewestOpcodes(MultiDexContainer<T> container) throws IOException {
-		Opcodes opcodes = null;
-		for (String entryName : container.getDexEntryNames()) {
-			opcodes = OpcodeUtils.getNewestOpcodes(opcodes, container.getEntry(entryName).getOpcodes(), true);
-		}
-		return opcodes;
-	}
-	*/
 
 	public static Opcodes getNewestOpcodes(Opcodes o1, Opcodes o2, boolean nullable) {
 		if (nullable) {

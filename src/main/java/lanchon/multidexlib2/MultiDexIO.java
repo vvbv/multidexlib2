@@ -74,28 +74,27 @@ public class MultiDexIO {
 
 	public static int writeDexFile(boolean multiDex, int threadCount, List<MemoryDataStore> output, DexFileNamer namer, DexFile dexFile,
 			int maxDexPoolSize, DexIO.Logger logger) throws IOException {
-		return writeDexFile(multiDex, threadCount, output, namer, dexFile, 0, false, maxDexPoolSize, logger);
+		return writeDexFile(multiDex, threadCount, output, namer, dexFile, 0, false, maxDexPoolSize);
 	}
 
 	public static int writeDexFile(boolean multiDex, List<MemoryDataStore> output, DexFileNamer namer, DexFile dexFile,
 			int minMainDexClassCount, boolean minimalMainDex, int maxDexPoolSize,
 			DexIO.Logger logger) throws IOException {
-		return writeDexFile(multiDex, 1, output, namer, dexFile, minMainDexClassCount, minimalMainDex, maxDexPoolSize,
-				logger);
+		return writeDexFile(multiDex, 1, output, namer, dexFile, minMainDexClassCount, minimalMainDex, maxDexPoolSize
+		);
 	}
 
 	public static int writeDexFile(boolean multiDex, int threadCount, List<MemoryDataStore> output, DexFileNamer namer, DexFile dexFile,
-			int minMainDexClassCount, boolean minimalMainDex, int maxDexPoolSize,
-			DexIO.Logger logger) throws IOException {
+			int minMainDexClassCount, boolean minimalMainDex, int maxDexPoolSize) throws IOException {
 		if (!multiDex) throw new UnsupportedOperationException(
 				"Non-multidex is no longer supported, please use the official multidexlib2 for that."
 		);
 		return writeMultiDexDirectory(threadCount, output, namer, dexFile, minMainDexClassCount,
-				minimalMainDex, maxDexPoolSize, logger);
+				minimalMainDex, maxDexPoolSize);
 	}
 
 	public static int writeMultiDexDirectory(int threadCount, List<MemoryDataStore> output, DexFileNamer namer,
-			DexFile dexFile, int minMainDexClassCount, boolean minimalMainDex, int maxDexPoolSize, DexIO.Logger logger)
+			DexFile dexFile, int minMainDexClassCount, boolean minimalMainDex, int maxDexPoolSize)
 			throws IOException {
 		DexFileNameIterator nameIterator = new DexFileNameIterator(namer);
 		if (threadCount <= 0) {
@@ -103,22 +102,13 @@ public class MultiDexIO {
 			if (threadCount > DEFAULT_MAX_THREADS) threadCount = DEFAULT_MAX_THREADS;
 		}
 		if (threadCount > 1 && minMainDexClassCount == 0 && !minimalMainDex) {
-			DexIO.writeMultiDexDirectoryMultiThread(threadCount, output, nameIterator, dexFile, maxDexPoolSize,
-					logger);
+			DexIO.writeMultiDexDirectoryMultiThread(threadCount, output, nameIterator, dexFile, maxDexPoolSize
+			);
 		} else {
 			DexIO.writeMultiDexDirectorySingleThread(output, nameIterator, dexFile, minMainDexClassCount,
-					minimalMainDex, maxDexPoolSize, logger);
+					minimalMainDex, maxDexPoolSize);
 		}
 		return nameIterator.getCount();
-	}
-
-	public static void purgeMultiDexDirectory(boolean multiDex, File directory, DexFileNamer namer) throws IOException {
-		List<String> names = new DirectoryDexContainer(directory, namer, null).getDexEntryNames();
-		if (!multiDex && names.size() > 1) throw new MultiDexDetectedException(directory.toString());
-		for (String name : names) {
-			File existingFile = new File(directory, name);
-			if (!existingFile.delete()) throw new IOException("Cannot delete file: " + existingFile);
-		}
 	}
 
 }

@@ -14,8 +14,8 @@ plugins {
     id 'signing'
 }
 
-def dexlib2Version = '2.4.0'
-def multidexlib2VersionSuffix = '.r4'
+def dexlib2Version = '2.5.2'
+def multidexlib2VersionSuffix = ''
 
 group = 'app.revanced'
 version = dexlib2Version + multidexlib2VersionSuffix
@@ -23,10 +23,8 @@ version = dexlib2Version + multidexlib2VersionSuffix
 ext.mainArtifact = 'multidexlib2'
 ext.artifactName = mainArtifact
 
-sourceCompatibility = '1.7'
-def jdk = findProperty('JDK7_HOME') as String ?: '/usr/lib/jvm/java-7-openjdk-amd64'
-def jdk_rt = new File(jdk, 'jre/lib/rt.jar')
-if (jdk_rt.exists()) compileJava.options.bootstrapClasspath = files(jdk_rt)
+sourceCompatibility = JavaVersion.VERSION_1_8
+targetCompatibility = JavaVersion.VERSION_1_8
 
 repositories {
     mavenCentral()
@@ -34,7 +32,7 @@ repositories {
 
 dependencies {
     api 'org.smali:dexlib2:' + dexlib2Version
-    api 'com.google.guava:guava:27.1-android'
+    api 'com.google.guava:guava:31.1-android'
 }
 
 apply from: 'configure-artifacts.gradle'
