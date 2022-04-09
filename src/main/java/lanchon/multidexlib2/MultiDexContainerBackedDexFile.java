@@ -1,5 +1,5 @@
 /*
- * multidexlib2 - Copyright 2015-2020 Rodrigo Balerdi
+ * multidexlib2 - Copyright 2015-2022 Rodrigo Balerdi
  * (GNU General Public License version 3 or later)
  *
  * multidexlib2 is free software: you can redistribute it and/or modify
@@ -15,6 +15,8 @@ import java.util.Collections;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
+
+import javax.annotation.Nonnull;
 
 import org.jf.dexlib2.Opcodes;
 import org.jf.dexlib2.iface.ClassDef;
@@ -50,11 +52,13 @@ public class MultiDexContainerBackedDexFile<T extends DexFile> implements DexFil
 		}
 	}
 
+	@Nonnull
 	@Override
 	public Set<? extends ClassDef> getClasses() {
 		return classes;
 	}
 
+	@Nonnull
 	@Override
 	public Opcodes getOpcodes() {
 		return opcodes;

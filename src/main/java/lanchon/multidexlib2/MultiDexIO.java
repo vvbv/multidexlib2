@@ -1,5 +1,5 @@
 /*
- * multidexlib2 - Copyright 2015-2020 Rodrigo Balerdi
+ * multidexlib2 - Copyright 2015-2022 Rodrigo Balerdi
  * (GNU General Public License version 3 or later)
  *
  * multidexlib2 is free software: you can redistribute it and/or modify
@@ -120,7 +120,7 @@ public class MultiDexIO {
 		if (!multiDex && names.size() > 1) throw new MultiDexDetectedException(directory.toString());
 		for (String name : names) {
 			File existingFile = new File(directory, name);
-			if (!existingFile.delete()) throw new IOException("Cannot delete file: " + existingFile.toString());
+			if (!existingFile.delete()) throw new IOException("Cannot delete file: " + existingFile);
 		}
 	}
 

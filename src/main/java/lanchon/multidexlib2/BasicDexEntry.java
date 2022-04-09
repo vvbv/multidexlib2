@@ -1,5 +1,5 @@
 /*
- * multidexlib2 - Copyright 2015-2020 Rodrigo Balerdi
+ * multidexlib2 - Copyright 2015-2022 Rodrigo Balerdi
  * (GNU General Public License version 3 or later)
  *
  * multidexlib2 is free software: you can redistribute it and/or modify
@@ -9,6 +9,8 @@
  */
 
 package lanchon.multidexlib2;
+
+import javax.annotation.Nonnull;
 
 import org.jf.dexlib2.iface.DexFile;
 import org.jf.dexlib2.iface.MultiDexContainer;
@@ -27,16 +29,19 @@ public class BasicDexEntry<C extends MultiDexContainer< /* ? extends */ D>, D ex
 		this.dexFile = dexFile;
 	}
 
+	@Nonnull
 	@Override
 	public String getEntryName() {
 		return entryName;
 	}
 
+	@Nonnull
 	@Override
 	public C getContainer() {
 		return container;
 	}
 
+	@Nonnull
 	@Override
 	public D getDexFile() {
 		return dexFile;

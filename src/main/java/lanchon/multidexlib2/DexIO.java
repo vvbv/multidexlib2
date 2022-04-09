@@ -1,5 +1,5 @@
 /*
- * multidexlib2 - Copyright 2015-2020 Rodrigo Balerdi
+ * multidexlib2 - Copyright 2015-2022 Rodrigo Balerdi
  * (GNU General Public License version 3 or later)
  *
  * multidexlib2 is free software: you can redistribute it and/or modify
@@ -95,7 +95,6 @@ public class DexIO {
 			final BatchedIterator<ClassDef> batchedIterator =
 					new BatchedIterator<>(classIterator, lock, PER_THREAD_BATCH_SIZE);
 			if (i != 0 && !batchedIterator.hasNext()) break;
-			//noinspection Convert2Lambda
 			callables.add(new Callable<Void>() {
 				@Override
 				public Void call() throws IOException {
