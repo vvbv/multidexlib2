@@ -14,8 +14,8 @@ plugins {
     id 'signing'
 }
 
-def dexlib2Version = '2.3.4'
-def multidexlib2VersionSuffix = '.r2'
+def dexlib2Version = '2.5.2'
+def multidexlib2VersionSuffix = ''
 
 group = 'com.github.lanchon.dexpatcher'
 version = dexlib2Version + multidexlib2VersionSuffix
@@ -29,11 +29,12 @@ def jdk_rt = new File(jdk, 'jre/lib/rt.jar')
 if (jdk_rt.exists()) compileJava.options.bootstrapClasspath = files(jdk_rt)
 
 repositories {
-    jcenter()
+    mavenCentral()
 }
 
 dependencies {
     api 'org.smali:dexlib2:' + dexlib2Version
+    api 'com.google.guava:guava:31.1-android'
 }
 
 apply from: 'configure-artifacts.gradle'
