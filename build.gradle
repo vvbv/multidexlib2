@@ -14,11 +14,10 @@ plugins {
     id 'signing'
 }
 
-def dexlib2Version = '2.5.2'
-def multidexlib2VersionSuffix = '.r2'
+def dexlib2Version = '2.5.3-8649b642'
 
 group = 'app.revanced'
-version = dexlib2Version + multidexlib2VersionSuffix
+version = dexlib2Version
 
 ext.mainArtifact = 'multidexlib2'
 ext.artifactName = mainArtifact
@@ -26,12 +25,22 @@ ext.artifactName = mainArtifact
 sourceCompatibility = JavaVersion.VERSION_1_8
 targetCompatibility = JavaVersion.VERSION_1_8
 
+def githubUsername = project.findProperty("gpr.user") ?: System.getenv("GITHUB_ACTOR")
+def githubPassword = project.findProperty("gpr.key") ?: System.getenv("GITHUB_TOKEN")
+
 repositories {
     mavenCentral()
+    maven {
+        url = uri("https://maven.pkg.github.com/revanced/smali")
+        credentials {
+            username = githubUsername
+            password = githubPassword
+        }
+    }
 }
 
 dependencies {
-    api 'org.smali:dexlib2:' + dexlib2Version
+    api 'app.revanced:dexlib2:' + dexlib2Version
     api 'com.google.guava:guava:31.1-android'
 }
 
