@@ -14,7 +14,7 @@ plugins {
     id 'signing'
 }
 
-def dexlib2Version = '2.5.3-8649b642'
+def dexlib2Version = '2.5.3-a3836654'
 
 group = 'app.revanced'
 version = dexlib2Version
